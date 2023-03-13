@@ -32,6 +32,7 @@ const authProvider = {
       })
       .catch((err) => {
         alert("Authentication failed");
+        window.location.replace("/login");
       });
   },
   logout: () => {

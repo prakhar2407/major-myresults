@@ -10,19 +10,17 @@ import {
   TableRow,
 } from "@mui/material";
 import axios from "axios";
-import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Subject from "../../interface/Subject";
+import SnackBarInterface from "../../interface/SnackBarInterface";
 import EmptyList from "../common/EmptyList";
 import AddIcon from "@mui/icons-material/Add";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
+import { useNavigate } from "react-router-dom";
 import FileUploadDialog from "../common/FileUploadDialog";
 import { UploadRequests } from "../../utils/UploadRequests";
-import SnackBarInterface from "../../interface/SnackBarInterface";
 
-const SubjectList = () => {
-  const [subjects, setSubjects] = useState<Subject[]>([]);
+const ResultList = () => {
+  const [result, setResult] = useState<any | null>();
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -45,16 +43,16 @@ const SubjectList = () => {
 
   useEffect(() => {
     axios
-      .get("/admin/getSubjects", {
+      .get("/teacher/getResultOfAllStudentEnrolled", {
         headers: { authorization: `${localStorage.getItem("token")}` },
       })
       .then((res) => {
-        setSubjects(res.data.data);
+        setResult(res.data.data);
       })
       .catch((err) => {
         setSnackBar({
           open: true,
-          message: "Error Fetching Subjects",
+          message: "Error Fetching Result",
           severity: "error",
         });
       });
@@ -79,13 +77,13 @@ const SubjectList = () => {
           size="small"
           startIcon={<AddIcon />}
           onClick={() => {
-            navigate("/subjects/create");
+            navigate("/results/create");
           }}
         >
           Create
         </Button>
       </div>
-      {subjects.length < 0 ? (
+      {result === null ? (
         <EmptyList />
       ) : (
         <div>
@@ -93,38 +91,38 @@ const SubjectList = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell style={{ fontWeight: "bolder" }}>Name</TableCell>
-                  <TableCell style={{ fontWeight: "bolder" }}>Active</TableCell>
                   <TableCell style={{ fontWeight: "bolder" }}>
-                    Created At
+                    Roll No
                   </TableCell>
-                  <TableCell style={{ fontWeight: "bolder" }}>
-                    Updated At
-                  </TableCell>
+                  <TableCell style={{ fontWeight: "bolder" }}>Grade</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {subjects.map((subject: Subject) => {
-                  return (
-                    <TableRow key={subject._id}>
-                      <TableCell>{subject.name}</TableCell>
-                      <TableCell>
-                        {subject.active === 1 ? "Yes" : "No"}
-                      </TableCell>
-                      <TableCell>
-                        {moment(subject.createdAt).format("LLL")}
-                      </TableCell>
-                      <TableCell>
-                        {moment(subject.updatedAt).format("LLL")}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                {result ? (
+                  Object.values(result).map((value: any, index: number) => {
+                    if (!value) {
+                      return null;
+                    }
+                    return (
+                      <TableRow key={index + ""}>
+                        <TableCell>{value["rollNumber"] || ""}</TableCell>
+                        <TableCell>{value["grade"] || ""}</TableCell>
+                      </TableRow>
+                    );
+                  })
+                ) : (
+                  <EmptyList />
+                )}
               </TableBody>
             </Table>
           </TableContainer>
         </div>
       )}
+      <FileUploadDialog
+        request={UploadRequests.uploadStudentMarks}
+        open={dialogOpen}
+        setOpen={setDialogOpen}
+      />
       <Snackbar
         open={snackBar.open}
         autoHideDuration={6000}
@@ -138,13 +136,8 @@ const SubjectList = () => {
           {snackBar.message}
         </Alert>
       </Snackbar>
-      <FileUploadDialog
-        request={UploadRequests.uploadSubject}
-        open={dialogOpen}
-        setOpen={setDialogOpen}
-      />
     </div>
   );
 };
 
-export default SubjectList;
+export default ResultList;

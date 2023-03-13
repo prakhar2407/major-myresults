@@ -1,5 +1,7 @@
 import {
+  Alert,
   Button,
+  Snackbar,
   Table,
   TableBody,
   TableCell,
@@ -17,11 +19,29 @@ import AddIcon from "@mui/icons-material/Add";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import FileUploadDialog from "../common/FileUploadDialog";
 import { UploadRequests } from "../../utils/UploadRequests";
+import SnackBarInterface from "../../interface/SnackBarInterface";
 
 const TeacherList = () => {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const navigate = useNavigate();
+
+  const [snackBar, setSnackBar] = useState<SnackBarInterface>({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackBar({ ...snackBar, open: false });
+  };
 
   useEffect(() => {
     axios
@@ -32,7 +52,11 @@ const TeacherList = () => {
         setTeachers(res.data.data);
       })
       .catch((err) => {
-        alert("Error Fetching Teachers");
+        setSnackBar({
+          open: true,
+          message: "Error Fetching Teachers",
+          severity: "error",
+        });
       });
   }, [dialogOpen]);
 
@@ -111,6 +135,19 @@ const TeacherList = () => {
           </TableContainer>
         </div>
       )}
+      <Snackbar
+        open={snackBar.open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert
+          onClose={handleClose}
+          severity={snackBar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackBar.message}
+        </Alert>
+      </Snackbar>
       <FileUploadDialog
         request={UploadRequests.uploadTeacher}
         open={dialogOpen}

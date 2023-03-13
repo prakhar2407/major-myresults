@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SnackBarInterface from "../../interface/SnackBarInterface";
 
-export interface Student {
+interface Student {
   name: string;
   email: string;
   rollNumber: string;

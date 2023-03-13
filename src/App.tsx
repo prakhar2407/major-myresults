@@ -1,10 +1,9 @@
-import { Admin, Resource, ListGuesser } from "react-admin";
+import { Admin, Resource } from "react-admin";
 import authProvider from "./authProvider";
 import { Roles } from "./enums/RolesEnum";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import PeopleIcon from "@mui/icons-material/People";
 import StudentResult from "./components/Student/StudentResult";
-import AdminResultCreate from "./components/Admin/AdminResultCreate";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import TeacherList from "./components/Teacher/TeacherList";
@@ -14,6 +13,11 @@ import AddStudent from "./components/Student/AddStudent";
 import SchoolIcon from "@mui/icons-material/School";
 import SubjectList from "./components/Subject/SubjectList";
 import AddSubject from "./components/Subject/AddSubject";
+import StudentEnrolledList from "./components/Teacher/StudentEnrolledList";
+import ResultList from "./components/Result/ResultList";
+import CreateResult from "./components/Teacher/CreateResult";
+import StudentProfile from "./components/Student/StudentProfile";
+import PersonIcon from "@mui/icons-material/Person";
 
 const App = () => {
   const navigate = useNavigate();
@@ -30,27 +34,36 @@ const App = () => {
       {(permissions) => (
         <>
           {permissions === Roles.Student ? (
-            <Resource
-              options={{ label: "Result" }}
-              name="results"
-              list={<StudentResult />}
-              icon={AssignmentIcon}
-            />
+            <>
+              <Resource
+                options={{ label: "Profile" }}
+                name="profile"
+                list={StudentProfile}
+                icon={PersonIcon}
+              />
+              <Resource
+                options={{ label: "Result" }}
+                name="results"
+                list={StudentResult}
+                icon={AssignmentIcon}
+              />
+            </>
           ) : null}
           {permissions === Roles.Teacher ? (
             <>
               <Resource
-                options={{ label: "Students" }}
-                name="posts"
-                list={ListGuesser}
+                options={{ label: "Enrolled Students" }}
+                name="students"
+                list={StudentEnrolledList}
                 icon={PeopleIcon}
+                create={AddStudent}
               />
               <Resource
                 options={{ label: "Results" }}
-                name="comments"
-                list={ListGuesser}
+                name="results"
+                list={ResultList}
                 icon={AssignmentIcon}
-                create={AdminResultCreate}
+                create={CreateResult}
               />
             </>
           ) : null}
