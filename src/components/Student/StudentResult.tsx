@@ -1,8 +1,63 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/ResultComponentStyle.css";
 import resultData from "../../data/resultData";
+import Result from "../../interface/Result";
+import axios from "axios";
+import SnackBarInterface from "../../interface/SnackBarInterface";
+import { Snackbar, Alert } from "@mui/material";
+import Student from "../../interface/Student";
 
 const StudentResult = () => {
+  const [result, setResult] = useState<Result[]>([]);
+  const [profileData, setProfileData] = useState<Student | null>(null);
+
+  const [snackBar, setSnackBar] = useState<SnackBarInterface>({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackBar({ ...snackBar, open: false });
+  };
+
+  useEffect(() => {
+    //API Call for Result
+    axios.get(`student/getResult?mentor=sameervashisht39@gmail.com`,{
+      headers: { authorization: `${localStorage.getItem("token")}` },
+    }).then((res) => {
+      setResult(res.data.data);
+    }).catch((err) => {
+      setSnackBar({
+        open: true,
+        message: err.response.data.message,
+        severity: "error",
+      });
+    })
+
+    //API call for Profile
+    axios
+    .get("/student/getProfile", {
+      headers: { authorization: `${localStorage.getItem("token")}` },
+    })
+    .then((res) => {
+      setProfileData(res.data.data);
+    })
+    .catch((err) => {
+      setSnackBar({
+        open: true,
+        message: "Error Fetching Details",
+        severity: "error",
+      });
+    });
+  },[])
   return (
     <div style={{ margin: "4rem" }}>
       <div
@@ -19,7 +74,7 @@ const StudentResult = () => {
         <div style={{ textAlign: "center", fontWeight: "bolder" }}>
           <div
             style={{ color: "yellow" }}
-          >{`${resultData.name}, ${resultData.rollNo}`}</div>
+          >{`${profileData?.name}, ${profileData?.rollNumber}`}</div>
           <div style={{ fontSize: "2rem", color: "#c10002" }}>
             THE NORTHCAP UNIVERSITY
           </div>
@@ -34,7 +89,7 @@ const StudentResult = () => {
           <div>FOR</div>
           <div>{`${resultData.degree}`}</div>
           <div style={{ color: "#c10002" }}>{`${resultData.branch}`}</div>
-          <div>{`${resultData.semester}th Semester Examination ${resultData.semesterMonthStart} - ${resultData.semesterMonthEnd} ${resultData.semesterYear}`}</div>
+          <div>{`${profileData?.semester}th Semester Examination ${resultData.semesterMonthStart} - ${resultData.semesterMonthEnd} ${resultData.semesterYear}`}</div>
         </div>
         <div>
           <img
@@ -53,11 +108,11 @@ const StudentResult = () => {
         }}
       >
         <div>
-          <div>{`NAME: ${resultData.name}`}</div>
+          <div>{`NAME: ${profileData?.name}`}</div>
           <div>{`FATHER'S NAME: ${resultData.fatherName}`}</div>
         </div>
         <div>
-          <div>{`ENROLMENT NO.: ${resultData.rollNo}`}</div>
+          <div>{`ENROLMENT NO.: ${profileData?.rollNumber}`}</div>
           <div>{`MOTHER'S NAME: : ${resultData.motherName}`}</div>
         </div>
       </div>
@@ -67,30 +122,33 @@ const StudentResult = () => {
             <tr>
               <th style={{ width: "2rem" }}>S.NO</th>
               <th>Course</th>
-              <th>Code</th>
-              <th>Credits</th>
               <th>Grade</th>
             </tr>
           </thead>
           <tbody>
-            {resultData.result.map((result: any, index: number) => (
-              <tr>
+            {result.map((result: any, index: number) => (
+              <tr key={index + ""}>
                 <td>{index + 1}</td>
                 <td>{result.course}</td>
-                <td>{result.courseCode}</td>
-                <td>{result.courseCredits}</td>
                 <td>{result.courseGrade}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <div style={{ marginTop: "2rem", fontWeight: "bolder" }}>
-        <div>{`SEMESTER - ${resultData.semester}`}</div>
-        <div>{`TOTAL CREDITS EARNED UPTO VII SEMESTER : ${resultData.creditsEarned}`}</div>
-        <div>{`SEMESTER GRADE POINT AVERAGE(SGPA) : ${resultData.sgpa}`}</div>
-        <div>{`CUMULATIVE GRADE POINT AVERAGE (CGPA) : ${resultData.cgpa}`}</div>
-      </div>
+      <Snackbar
+        open={snackBar.open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert
+          onClose={handleClose}
+          severity={snackBar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackBar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
