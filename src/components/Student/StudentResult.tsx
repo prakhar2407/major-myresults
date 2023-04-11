@@ -30,34 +30,38 @@ const StudentResult = () => {
 
   useEffect(() => {
     //API Call for Result
-    axios.get(`student/getResult?mentor=sameervashisht39@gmail.com`,{
-      headers: { authorization: `${localStorage.getItem("token")}` },
-    }).then((res) => {
-      setResult(res.data.data);
-    }).catch((err) => {
-      setSnackBar({
-        open: true,
-        message: err.response.data.message,
-        severity: "error",
+    axios
+      .get(`student/getResult?mentor=sameervashisht39@gmail.com`, {
+        headers: { authorization: `${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        console.log(res.data.data);
+        setResult(res.data.data);
+      })
+      .catch((err) => {
+        setSnackBar({
+          open: true,
+          message: err.response.data.message,
+          severity: "error",
+        });
       });
-    })
 
     //API call for Profile
     axios
-    .get("/student/getProfile", {
-      headers: { authorization: `${localStorage.getItem("token")}` },
-    })
-    .then((res) => {
-      setProfileData(res.data.data);
-    })
-    .catch((err) => {
-      setSnackBar({
-        open: true,
-        message: "Error Fetching Details",
-        severity: "error",
+      .get("/student/getProfile", {
+        headers: { authorization: `${localStorage.getItem("token")}` },
+      })
+      .then((res) => {
+        setProfileData(res.data.data);
+      })
+      .catch((err) => {
+        setSnackBar({
+          open: true,
+          message: "Error Fetching Details",
+          severity: "error",
+        });
       });
-    });
-  },[])
+  }, []);
   return (
     <div style={{ margin: "4rem" }}>
       <div
@@ -129,8 +133,8 @@ const StudentResult = () => {
             {result.map((result: any, index: number) => (
               <tr key={index + ""}>
                 <td>{index + 1}</td>
-                <td>{result.course}</td>
-                <td>{result.courseGrade}</td>
+                <td>{result.subject}</td>
+                <td>{result.grade}</td>
               </tr>
             ))}
           </tbody>

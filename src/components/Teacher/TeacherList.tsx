@@ -72,7 +72,7 @@ const TeacherList = () => {
             setDialogOpen(true);
           }}
         >
-          Export
+          Import
         </Button>
         <Button
           variant="contained"

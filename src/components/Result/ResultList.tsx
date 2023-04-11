@@ -70,7 +70,7 @@ const ResultList = () => {
             setDialogOpen(true);
           }}
         >
-          Export
+          Import
         </Button>
         <Button
           variant="contained"
@@ -95,18 +95,22 @@ const ResultList = () => {
                     Roll No
                   </TableCell>
                   <TableCell style={{ fontWeight: "bolder" }}>Grade</TableCell>
+                  <TableCell style={{ fontWeight: "bolder" }}>
+                    Subject
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {result ? (
-                  Object.values(result).map((value: any, index: number) => {
+                  result.map((value: any, index: number) => {
                     if (!value) {
                       return null;
                     }
                     return (
                       <TableRow key={index + ""}>
-                        <TableCell>{value["rollNumber"] || ""}</TableCell>
-                        <TableCell>{value["grade"] || ""}</TableCell>
+                        <TableCell>{value.rollNumber || ""}</TableCell>
+                        <TableCell>{value.grade || ""}</TableCell>
+                        <TableCell>{value.subject}</TableCell>
                       </TableRow>
                     );
                   })

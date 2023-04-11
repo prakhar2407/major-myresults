@@ -72,7 +72,7 @@ const SubjectList = () => {
             setDialogOpen(true);
           }}
         >
-          Export
+          Upload Student Subject
         </Button>
         <Button
           variant="contained"

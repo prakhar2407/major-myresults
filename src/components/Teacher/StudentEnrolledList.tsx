@@ -72,7 +72,7 @@ const StudentEnrolledList = () => {
             setDialogOpen(true);
           }}
         >
-          Export
+          Import
         </Button>
         <Button
           variant="contained"
