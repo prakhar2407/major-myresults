@@ -69,6 +69,12 @@ const ResultList = () => {
           onClick={() => {
             setDialogOpen(true);
           }}
+          sx={{
+            backgroundColor: "#58287F",
+            "&:hover": {
+              backgroundColor: "#58287F",
+            },
+          }}
         >
           Import
         </Button>
@@ -78,6 +84,12 @@ const ResultList = () => {
           startIcon={<AddIcon />}
           onClick={() => {
             navigate("/results/create");
+          }}
+          sx={{
+            backgroundColor: "#58287F",
+            "&:hover": {
+              backgroundColor: "#58287F",
+            },
           }}
         >
           Create

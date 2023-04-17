@@ -104,6 +104,7 @@ const FileUploadDialog = (props: InputProps) => {
                     color="primary"
                     aria-label="upload picture"
                     component="label"
+                    sx={{ color: "#58287F" }}
                   >
                     <input
                       hidden
@@ -127,10 +128,28 @@ const FileUploadDialog = (props: InputProps) => {
               props.setOpen(false);
               setSelectedFile(null);
             }}
+            sx={{
+              color: "white",
+              backgroundColor: "#58287F",
+              "&:hover": {
+                backgroundColor: "#58287F",
+              },
+            }}
           >
             Close
           </Button>
-          <Button onClick={handleSubmit}>Submit</Button>
+          <Button
+            onClick={handleSubmit}
+            sx={{
+              backgroundColor: "#58287F",
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#58287F",
+              },
+            }}
+          >
+            Submit
+          </Button>
         </DialogActions>
       </Dialog>
       <Snackbar

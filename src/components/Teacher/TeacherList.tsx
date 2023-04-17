@@ -20,6 +20,8 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import FileUploadDialog from "../common/FileUploadDialog";
 import { UploadRequests } from "../../utils/UploadRequests";
 import SnackBarInterface from "../../interface/SnackBarInterface";
+import TotalCount from "../common/TotalCount";
+import { CChart } from "@coreui/react-chartjs";
 
 const TeacherList = () => {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
@@ -61,7 +63,7 @@ const TeacherList = () => {
   }, [dialogOpen]);
 
   return (
-    <div style={{ margin: "1rem 0" }}>
+    <div style={{ margin: "1rem 0", padding: "2rem" }}>
       <div style={{ textAlign: "right" }}>
         <Button
           style={{ marginRight: "1rem" }}
@@ -70,6 +72,12 @@ const TeacherList = () => {
           startIcon={<FileUploadIcon />}
           onClick={() => {
             setDialogOpen(true);
+          }}
+          sx={{
+            backgroundColor: "#58287F",
+            "&:hover": {
+              backgroundColor: "#58287F",
+            },
           }}
         >
           Import
@@ -81,59 +89,120 @@ const TeacherList = () => {
           onClick={() => {
             navigate("/teachers/create");
           }}
+          sx={{
+            backgroundColor: "#58287F",
+            "&:hover": {
+              backgroundColor: "#58287F",
+            },
+          }}
         >
           Create
         </Button>
       </div>
-      {teachers.length < 0 ? (
+      {teachers.length <= 0 ? (
         <EmptyList />
       ) : (
-        <div>
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell style={{ fontWeight: "bolder" }}>Email</TableCell>
-                  <TableCell style={{ fontWeight: "bolder" }}>Name</TableCell>
-                  <TableCell style={{ fontWeight: "bolder" }}>
-                    Employement Id
-                  </TableCell>
-                  <TableCell style={{ fontWeight: "bolder" }}>
-                    Subject
-                  </TableCell>
-                  <TableCell style={{ fontWeight: "bolder" }}>
-                    Phone Number
-                  </TableCell>
-                  <TableCell style={{ fontWeight: "bolder" }}>
-                    Created At
-                  </TableCell>
-                  <TableCell style={{ fontWeight: "bolder" }}>
-                    Updated At
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {teachers.map((teacher: Teacher) => {
-                  return (
-                    <TableRow key={teacher._id}>
-                      <TableCell>{teacher.email}</TableCell>
-                      <TableCell>{teacher.name}</TableCell>
-                      <TableCell>{teacher.employeementId}</TableCell>
-                      <TableCell>{teacher.subject}</TableCell>
-                      <TableCell>{teacher.phoneNumber}</TableCell>
-                      <TableCell>
-                        {moment(teacher.createdAt).format("LLL")}
-                      </TableCell>
-                      <TableCell>
-                        {moment(teacher.updatedAt).format("LLL")}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </div>
+        <>
+          <div
+            style={{
+              display: "flex",
+              margin: "2rem 0",
+              justifyContent: "space-between",
+              marginBottom: "2rem",
+            }}
+          >
+            <div>
+              <TotalCount count={teachers.length} />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",
+                padding: "3rem",
+                borderRadius: "1%",
+              }}
+            >
+              <CChart
+                style={{ backgroundColor: "#F5EDCE" }}
+                width={800}
+                type="bar"
+                data={{
+                  labels: [
+                    "FOCP",
+                    "DSA",
+                    "CN",
+                    "DMBS",
+                    "OS",
+                    "AI & ML",
+                    "Big Data",
+                  ],
+                  datasets: [
+                    {
+                      label: "Students",
+                      backgroundColor: "#89C4E1",
+                      data: [40, 20, 12, 39, 10, 40, 39, 80, 40],
+                    },
+                  ],
+                }}
+              />
+            </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",
+              padding: "3rem",
+              borderRadius: "1%",
+            }}
+          >
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell style={{ fontWeight: "bolder" }}>
+                      Email
+                    </TableCell>
+                    <TableCell style={{ fontWeight: "bolder" }}>Name</TableCell>
+                    <TableCell style={{ fontWeight: "bolder" }}>
+                      Employement Id
+                    </TableCell>
+                    <TableCell style={{ fontWeight: "bolder" }}>
+                      Subject
+                    </TableCell>
+                    <TableCell style={{ fontWeight: "bolder" }}>
+                      Phone Number
+                    </TableCell>
+                    <TableCell style={{ fontWeight: "bolder" }}>
+                      Created At
+                    </TableCell>
+                    <TableCell style={{ fontWeight: "bolder" }}>
+                      Updated At
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {teachers.map((teacher: Teacher) => {
+                    return (
+                      <TableRow key={teacher._id}>
+                        <TableCell>{teacher.email}</TableCell>
+                        <TableCell>{teacher.name}</TableCell>
+                        <TableCell>{teacher.employeementId}</TableCell>
+                        <TableCell>{teacher.subject}</TableCell>
+                        <TableCell>{teacher.phoneNumber}</TableCell>
+                        <TableCell>
+                          {moment(teacher.createdAt).format("LLL")}
+                        </TableCell>
+                        <TableCell>
+                          {moment(teacher.updatedAt).format("LLL")}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+        </>
       )}
       <Snackbar
         open={snackBar.open}

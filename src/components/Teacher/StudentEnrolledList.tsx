@@ -71,6 +71,12 @@ const StudentEnrolledList = () => {
           onClick={() => {
             setDialogOpen(true);
           }}
+          sx={{
+            backgroundColor: "#58287F",
+            "&:hover": {
+              backgroundColor: "#58287F",
+            },
+          }}
         >
           Import
         </Button>
@@ -80,6 +86,12 @@ const StudentEnrolledList = () => {
           startIcon={<AddIcon />}
           onClick={() => {
             navigate("/students/create");
+          }}
+          sx={{
+            backgroundColor: "#58287F",
+            "&:hover": {
+              backgroundColor: "#58287F",
+            },
           }}
         >
           Create

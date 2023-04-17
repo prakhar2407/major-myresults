@@ -129,6 +129,12 @@ const AddStudent = () => {
               });
           }}
           variant="outlined"
+          sx={{
+            backgroundColor: "#58287F",
+            "&:hover": {
+              backgroundColor: "#58287F",
+            },
+          }}
         >
           Save
         </Button>

@@ -18,6 +18,8 @@ import ResultList from "./components/Result/ResultList";
 import CreateResult from "./components/Teacher/CreateResult";
 import StudentProfile from "./components/Student/StudentProfile";
 import PersonIcon from "@mui/icons-material/Person";
+import "./App.css";
+import CustomLayout from "./CustomLayout";
 
 const App = () => {
   const navigate = useNavigate();
@@ -30,7 +32,7 @@ const App = () => {
   }, []);
 
   return (
-    <Admin authProvider={authProvider}>
+    <Admin authProvider={authProvider} layout={CustomLayout}>
       {(permissions) => (
         <>
           {permissions === Roles.Student ? (

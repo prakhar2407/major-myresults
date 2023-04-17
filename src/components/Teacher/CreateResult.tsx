@@ -141,6 +141,12 @@ const CreateResult = () => {
               let list: Subject[] = subjectList.concat(subject);
               setSubjectList(list);
             }}
+            sx={{
+              backgroundColor: "#58287F",
+              "&:hover": {
+                backgroundColor: "#58287F",
+              },
+            }}
           >
             +
           </Button>
@@ -168,6 +174,12 @@ const CreateResult = () => {
                         color="error"
                         onClick={() => {
                           handleDelete(subject.subjectName);
+                        }}
+                        sx={{
+                          backgroundColor: "#58287F",
+                          "&:hover": {
+                            backgroundColor: "#58287F",
+                          },
                         }}
                       >
                         -
@@ -227,6 +239,12 @@ const CreateResult = () => {
                   severity: "error",
                 });
               });
+          }}
+          sx={{
+            backgroundColor: "#58287F",
+            "&:hover": {
+              backgroundColor: "#58287F",
+            },
           }}
         >
           Save

@@ -20,6 +20,8 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import FileUploadDialog from "../common/FileUploadDialog";
 import { UploadRequests } from "../../utils/UploadRequests";
 import SnackBarInterface from "../../interface/SnackBarInterface";
+import TotalCount from "../common/TotalCount";
+import { CChart } from "@coreui/react-chartjs";
 
 const StudentList = () => {
   const [students, setStudents] = useState<Student[]>([]);
@@ -58,10 +60,10 @@ const StudentList = () => {
           severity: "error",
         });
       });
-  }, []);
+  }, [dialogOpen]);
 
   return (
-    <div style={{ margin: "1rem 0" }}>
+    <div style={{ margin: "1rem 0", padding: "2rem" }}>
       <div style={{ textAlign: "right" }}>
         <Button
           style={{ marginRight: "1rem" }}
@@ -70,6 +72,12 @@ const StudentList = () => {
           startIcon={<FileUploadIcon />}
           onClick={() => {
             setDialogOpen(true);
+          }}
+          sx={{
+            backgroundColor: "#58287F",
+            "&:hover": {
+              backgroundColor: "#58287F",
+            },
           }}
         >
           Import
@@ -81,14 +89,70 @@ const StudentList = () => {
           onClick={() => {
             navigate("/students/create");
           }}
+          sx={{
+            backgroundColor: "#58287F",
+            "&:hover": {
+              backgroundColor: "#58287F",
+            },
+          }}
         >
           Create
         </Button>
       </div>
+      <div
+        style={{
+          display: "flex",
+          margin: "2rem 0",
+          justifyContent: "space-between",
+          marginBottom: "2rem",
+        }}
+      >
+        <div>
+          <TotalCount count={students.length} />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",
+            padding: "3rem",
+            borderRadius: "1%",
+          }}
+        >
+          <CChart
+            type="bar"
+            width={800}
+            data={{
+              labels: [
+                "FOCP",
+                "DSA",
+                "CN",
+                "DMBS",
+                "OS",
+                "AI & ML",
+                "Big Data",
+              ],
+              datasets: [
+                {
+                  label: "Students",
+                  backgroundColor: "#89C4E1",
+                  data: [40, 20, 12, 39, 10, 40, 39, 80, 40],
+                },
+              ],
+            }}
+          />
+        </div>
+      </div>
       {students.length < 0 ? (
         <EmptyList />
       ) : (
-        <div>
+        <div
+          style={{
+            display: "flex",
+            boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",
+            padding: "3rem",
+            borderRadius: "1%",
+          }}
+        >
           <TableContainer>
             <Table>
               <TableHead>
